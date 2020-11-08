@@ -11,8 +11,11 @@ def loadJsonData():
     option_dict = mcqs[1]
     return (q_dict, option_dict)
 
+def selectAns():
+    print("You selected",r.get())
 
 def setMcqs():
+    global r
 
     # get quetion list
     q_dict, option_dict = loadJsonData()
@@ -23,9 +26,27 @@ def setMcqs():
 
     # set quetion
     text = q_dict.get(str(key), "")
-    lblText = Label(root, text=text, justify="center",
-                    wraplength=400, width=500, font=(18))
+    lblText = Label(root, text=text, justify="center",wraplength=400, width=500, font=(18))
     lblText.pack(pady=(20, 10))
+
+    options = option_dict.get(str(key),[])
+    print(options)
+    # set Mcqs
+    #r.set(0)
+    o = Radiobutton(root,text=options[0],variable=r,value=1,font=("Sans",14),width=30,anchor=W,command=selectAns)
+    o.pack(pady=(10,0))
+
+    #r.set(0)
+    o = Radiobutton(root,text=options[1],variable=r,value=2,font=("Sans",14),width=30,anchor=W,command=selectAns)
+    o.pack(pady=(10,0))
+
+    #r.set(0)
+    o = Radiobutton(root,text=options[2],variable=r,value=3,font=("Sans",14),width=30,anchor=W,command=selectAns)
+    o.pack(pady=(10,0))
+
+    #r.set(0)
+    o = Radiobutton(root,text=options[3],variable=r,value=4,font=("Sans",14),width=30,anchor=W,command=selectAns)
+    o.pack(pady=(10,0))
 
 
 def startQuiz():
