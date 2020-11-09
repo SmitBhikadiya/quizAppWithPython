@@ -22,7 +22,7 @@ def setMcqs():
 
     # default intialization
     r = IntVar()
-    key = 1
+    key = 2
 
     # set quetion
     text = q_dict.get(str(key), "")
