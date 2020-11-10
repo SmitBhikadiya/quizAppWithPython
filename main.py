@@ -78,7 +78,7 @@ def selectAns(index,c):
         taken_time = getFormatedTime(taken_time) 
         footer.destroy()
         root.quit()
-        messagebox.showinfo("ScoreBoard","Your score is "+str(right)+" out of 10\nYou completed quiz in "+str(taken_time))
+        messagebox.showinfo("ScoreBoard","## Congrats ##\nScore : "+str(right)+"/10\nTime : "+str(taken_time))
     else:
         setMcqs(index,c)
 
@@ -99,7 +99,7 @@ def setMcqs(index,c):
 
     # set quetion
     text = q_dict.get(str(key), "")
-    lblText = Label(root, text=text, justify="center",wraplength=400, width=500, font=(18))
+    lblText = Label(root, text="("+str(index)+") "+text, justify="center",wraplength=400, width=500, font=(18))
     lblText.pack(pady=(20, 10))
 
     options = option_dict.get(str(key),[])
