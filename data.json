@@ -26,13 +26,13 @@
         ],
         "3": [
             "Mumbai",
-            "Delhi",
             "Chennai",
+            "Delhi",
             "Lucknow"
         ],
         "4": [
-            "TURBO C",
             "Py Interpreter",
+            "TURBO C",
             "Notepad",
             "IDE"
         ],
@@ -72,5 +72,17 @@
             "let",
             "global"
         ]
+    },
+    {
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 1,
+        "5": 4,
+        "6": 2,
+        "7": 1,
+        "8": 2,
+        "9": 4,
+        "10": 4
     }
 ]

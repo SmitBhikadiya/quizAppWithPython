@@ -3,26 +3,99 @@
 from tkinter import *
 from tkinter import messagebox
 import json
+import random
+import threading
+import time
 
+
+user_answer = []
+set_answer = []
+right = 0
+starting_time = 0
+ending_time = 0
+footer = None
+
+def check_correct(que_number, selected):
+    global right
+
+    if str(que_number) in set_answer:
+        if int(selected) == set_answer.get(str(que_number),0):
+            print("True")
+            right += 1 
+        else:
+            print("False")
+
+def gen():
+    global rand_list
+    rand_list = []
+    while True:
+        rand = random.randint(1,10)
+        if len(rand_list) == 10:
+            break
+        if rand in rand_list:
+            pass
+        else:
+            rand_list.append(rand)
 
 def loadJsonData():
+    global set_answer
     mcqs = json.loads(open("quizApp/data.json", "r").read())
     q_dict = mcqs[0]
     option_dict = mcqs[1]
+    set_answer = mcqs[2]
     return (q_dict, option_dict)
 
-def selectAns():
-    print("You selected",r.get())
+def getFormatedTime(t):
+    t = int(t)
+    if t>60:
+        min_ = t//60
+        sec_ = t%60
+    else:
+        min_ = 0
+        sec_ = t
+    if min_ < 10:
+        if min_ == 0:min_ = int("00"+str(min_))
+        else:min_ = int("0"+str(min_))
+    if sec_ < 10:
+        sec_ = int("0"+str(sec_))
+    return str(min_)+" min "+str(sec_)+" sec"
 
-def setMcqs():
+def selectAns(index,c):
+    global starting_time
+    user_answer.append([rand_list[c-1],r.get()])
+    check_correct(rand_list[c-1],r.get())
+    lblText.destroy()
+    r1.destroy()
+    r2.destroy()
+    r3.destroy()
+    r4.destroy()
+    index += 1
+    c += 1
+    if index > 10:
+        ending_time = time.time()
+        print(ending_time)
+        taken_time = ending_time - starting_time
+        taken_time = getFormatedTime(taken_time) 
+        footer.destroy()
+        root.quit()
+        messagebox.showinfo("ScoreBoard","Your score is "+str(right)+" out of 10\nYou completed quiz in "+str(taken_time))
+    else:
+        setMcqs(index,c)
+
+def setMcqs(index,c):
+
+    root.config(bg="#004455")
+
     global r
+    global lblText
+    global r1,r2,r3,r4
 
     # get quetion list
     q_dict, option_dict = loadJsonData()
 
     # default intialization
     r = IntVar()
-    key = 2
+    key = rand_list[index-1]
 
     # set quetion
     text = q_dict.get(str(key), "")
@@ -31,31 +104,47 @@ def setMcqs():
 
     options = option_dict.get(str(key),[])
     print(options)
+
     # set Mcqs
-    #r.set(0)
-    o = Radiobutton(root,text=options[0],variable=r,value=1,font=("Sans",14),width=30,anchor=W,command=selectAns)
-    o.pack(pady=(10,0))
+    r1 = Radiobutton(root,text=options[0],variable=r,value=1,font=("Sans",14),width=30,anchor=W,command=lambda : selectAns(index,c))
+    r1.pack(pady=(10,0))
+    r2 = Radiobutton(root,text=options[1],variable=r,value=2,font=("Sans",14),width=30,anchor=W,command=lambda : selectAns(index,c))
+    r2.pack(pady=(10,0))
+    r3 = Radiobutton(root,text=options[2],variable=r,value=3,font=("Sans",14),width=30,anchor=W,command=lambda : selectAns(index,c))
+    r3.pack(pady=(10,0))
+    r4 = Radiobutton(root,text=options[3],variable=r,value=4,font=("Sans",14),width=30,anchor=W,command=lambda : selectAns(index,c))
+    r4.pack(pady=(10,0))
 
-    #r.set(0)
-    o = Radiobutton(root,text=options[1],variable=r,value=2,font=("Sans",14),width=30,anchor=W,command=selectAns)
-    o.pack(pady=(10,0))
+    if footer == None:
+        setFooter()
+    else:
+        footer.destroy()
+        setFooter()
+        footer.config(text=str(index)+"/10")
 
-    #r.set(0)
-    o = Radiobutton(root,text=options[2],variable=r,value=3,font=("Sans",14),width=30,anchor=W,command=selectAns)
-    o.pack(pady=(10,0))
-
-    #r.set(0)
-    o = Radiobutton(root,text=options[3],variable=r,value=4,font=("Sans",14),width=30,anchor=W,command=selectAns)
-    o.pack(pady=(10,0))
-
+def setFooter():
+    global footer
+    # set footer
+    footer = Label(root,text="1/10",width=100,bg="#ffffff",fg="#000000",font=("Sans",20))
+    footer.pack(pady=(40,0))
 
 def startQuiz():
+    global c
+    global starting_time
+
+    starting_time = time.time()
+
     label_img1.destroy()
     label_text.destroy()
     button_start.destroy()
     instr_label.destroy()
     lblRules.destroy()
-    setMcqs()
+
+    gen()
+    index = 1
+    c = 1
+    print(rand_list)
+    setMcqs(index,c)
 
 
 # create windows screen
@@ -90,7 +179,7 @@ instr_label.pack()
 
 # rules
 lblRules = Label(root, text="This quiz contains 10 quetions\nYou will get 20 seconds to solve a quetion\nOnce you select a radio that will be a final choice\nhence think before you select",
-                 width=100, background="#000000", foreground="#ffffff", font=("Times", 14))
+                 width=100, background="#000055", foreground="#ffffff", font=("Times", 14))
 lblRules.pack(pady=(60, 0))
 
 # change frame using loop
