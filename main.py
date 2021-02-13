@@ -39,7 +39,7 @@ def gen():
 
 def loadJsonData():
     global set_answer
-    mcqs = json.loads(open("quizApp/data.json", "r").read())
+    mcqs = json.loads(open("data.json", "r").read())
     q_dict = mcqs[0]
     option_dict = mcqs[1]
     set_answer = mcqs[2]
@@ -155,7 +155,7 @@ root.config(background="white")
 root.resizable(0, 0)
 
 # create image(logo) for label
-logo = PhotoImage(file="quizApp/exam.png")
+logo = PhotoImage(file="exam.png")
 logo = logo.subsample(5, 5)  # divide height and width by 4
 # logo configration
 label_img1 = Label(root, image=logo, background="#ffffff")
@@ -167,7 +167,7 @@ label_text = Label(root, text="QuizStar", font=(
 label_text.pack()
 
 # image button and configration
-btnImg = PhotoImage(file="quizApp/Frame.png")
+btnImg = PhotoImage(file="Frame.png")
 button_start = Button(root, image=btnImg, relief=FLAT,
                       border=0, background="#ffffff", command=startQuiz)
 button_start.pack(pady=(15, 0))  # padding by top
